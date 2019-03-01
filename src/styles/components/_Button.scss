@@ -1,0 +1,44 @@
+.Button {
+  @include font-normal;
+
+  min-height: 30px;
+
+  background-color: $grey-6;
+  border: none;
+  border-radius: 2px;
+  color: $white;
+  font-weight: bold;
+  padding-left: 15px;
+  padding-right: 15px;
+  white-space: nowrap;
+  margin-left: 5px;
+  margin-right: 5px;
+
+  &:hover {
+    background-color: $brand;
+  }
+}
+
+.Button.is-hidden {
+  display: none;
+}
+
+.Button--cancel {
+  color: $grey-6;
+  background-color: white;
+
+  &:hover {
+    background-color: white;
+    color: $brand;
+  }
+}
+
+.Button--danger {
+  background-color: $brand;
+}
+
+@include touch-input {
+  .Button {
+    min-height: $touch-target-size;
+  }
+}

@@ -1,0 +1,11 @@
+// Utility classes.
+
+// Make item stretch along main axis.
+.u-stretch {
+  flex-grow: 1;
+}
+
+// Make item stretch along cross axis.
+.u-cross-stretch {
+  align-self: stretch;
+}

@@ -1,0 +1,24 @@
+.DirectoryBreadcrumbs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: $subtitle-font-size;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  min-height: 25px;
+}
+
+.DirectoryBreadcrumbs__link {
+  color: black;
+}
+
+.DirectoryBreadcrumbs__separator {
+  min-width: 20px;
+  text-align: center;
+}
+
+.DirectoryBreadcrumbs__loading-icon {
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+}

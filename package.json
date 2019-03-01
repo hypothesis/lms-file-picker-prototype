@@ -1,0 +1,44 @@
+{
+  "name": "lms-file-picker-prototype",
+  "version": "1.0.0",
+  "description": "Prototype for the Hypothesis LMS file picker integration",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --list-different --write src/**/*.js",
+    "lint": "eslint src/ && prettier --check src/**/*.js",
+    "start": "nodemon --watch src/server src/server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypothesis/lms-file-picker-prototype.git"
+  },
+  "author": "Robert Knight <robertknight@hypothes.is>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/hypothesis/lms-file-picker-prototype/issues"
+  },
+  "homepage": "https://github.com/hypothesis/lms-file-picker-prototype#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "eslint": "^5.14.1",
+    "eslint-config-hypothesis": "^1.0.0",
+    "eslint-plugin-react": "^7.12.4",
+    "express": "^4.16.4",
+    "mustache": "^3.0.1",
+    "nodemon": "^1.18.10",
+    "parcel-bundler": "^1.11.0",
+    "prettier": "^1.16.4",
+    "sass": "^1.17.2"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "normalize.css": "^8.0.1",
+    "preact": "^8.4.2",
+    "prop-types": "^15.7.2",
+    "query-string": "^6.2.0"
+  },
+  "browserslist": [
+    ">2%, not IE 11"
+  ]
+}

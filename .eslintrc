@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "hypothesis",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "indent": "off"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "settings": {
+    "react": {
+      "pragma": "h"
+    }
+  }
+}
