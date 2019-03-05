@@ -11,4 +11,8 @@ const config = JSON.parse(
 
 const { authToken, lmsName } = config;
 
-render(<FilePickerApp authToken={authToken} lmsName={lmsName}/>, rootEl, rootEl.firstChild);
+render(
+  <FilePickerApp authToken={authToken} lmsName={lmsName} />,
+  rootEl,
+  rootEl.firstChild
+);

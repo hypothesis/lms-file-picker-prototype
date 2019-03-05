@@ -4,8 +4,8 @@
   "description": "Prototype for the Hypothesis LMS file picker integration",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --list-different --write src/**/*.js",
-    "lint": "eslint src/ && prettier --check src/**/*.js",
+    "format": "prettier --list-different --write **/*.js",
+    "lint": "eslint src/ && prettier --check **/*.js",
     "start": "nodemon --watch src/server src/server/index.js"
   },
   "repository": {
