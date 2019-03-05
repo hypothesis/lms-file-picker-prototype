@@ -3,7 +3,6 @@ import propTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Button from './Button';
-import DialogBackground from './DialogBackground';
 import { zIndexScale } from '../utils/style';
 
 /**
@@ -45,7 +44,7 @@ export default function Dialog({
       tabIndex="0"
       ref={rootEl}
     >
-      <DialogBackground />
+      <div className="Dialog__background" style={{ zIndex: zIndexScale.dialogBackground }}/>
       <div className="Dialog__container" style={{ zIndex: zIndexScale.dialog }}>
         <div
           className={classNames({
