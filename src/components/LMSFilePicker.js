@@ -1,4 +1,4 @@
-import { Component, h } from 'preact';
+import { Component, Fragment, h } from 'preact';
 import propTypes from 'prop-types';
 
 import AuthWindow from '../utils/AuthWindow';
@@ -7,8 +7,6 @@ import Dialog from './Dialog';
 import DirectoryBreadcrumbs from './DirectoryBreadcrumbs';
 import FileList from './FileList';
 import { AuthorizationError, listFiles } from '../utils/api';
-
-const Fragment = children => <span>{children}</span>;
 
 /**
  * A file picker dialog that allows the user to choose files from their
