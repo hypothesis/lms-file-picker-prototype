@@ -41,14 +41,18 @@ export default class LMSFilePicker extends Component {
       /** Set to `true` if the list of files is being fetched. */
       isLoading: true,
     };
-    this._authenticateAndFetchFiles = this._authenticateAndFetchFiles.bind(
+    this._authorizeAndFetchFiles = this._authorizeAndFetchFiles.bind(
       this
     );
     this._fetchFiles = this._fetchFiles.bind(this);
+
+    // `AuthWindow` instance, set only when waiting for the user to approve
+    // the app's access to the user's files in the LMS.
+    this._authWindow = null;
   }
 
-  componentDidMount() {
-    this._authenticateAndFetchFiles();
+  async componentDidMount() {
+    this._fetchFilesOrPromptToAuthorize();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,38 +69,30 @@ export default class LMSFilePicker extends Component {
     this.setState({ isLoading: false, files });
   }
 
-  async _authenticateAndFetchFiles() {
+  async _fetchFilesOrPromptToAuthorize() {
+    this.setState({ isAuthorizing: false });
+    try {
+      await this._fetchFiles();
+    } catch (e) {
+      if (e instanceof AuthorizationError) {
+        // Show authorization prompt.
+        this.setState({ isAuthorizing: true });
+      }
+    }
+  }
+
+  async _authorizeAndFetchFiles() {
     if (this._authWindow) {
       this._authWindow.focus();
       return;
     }
 
-    // Create the authentication window. We might not show this to the user if
-    // they are already authenticated, but we must call `window.open` in the
-    // current turn of the event loop because certain browsers (eg. Firefox)
-    // do not persist the "user gesture occurred" state across microtasks.
     const { authToken, lmsName } = this.props;
     this._authWindow = new AuthWindow({ authToken, lmsName });
 
     try {
-      // Perform an API call to check if we are already authorized.
-      await this._fetchFiles();
-    } catch (e) {
-      if (e instanceof AuthorizationError) {
-        this.setState({ isAuthorizing: true });
-
-        // Show authorization window and wait for it to close.
-        await this._authWindow.authorize();
-
-        // Try to fetch files again.
-        try {
-          await this._fetchFiles();
-          this.setState({ isAuthorizing: false });
-        } catch (e) {
-          // Authorization failed, close the picker.
-          this.props.onCancel();
-        }
-      }
+      await this._authWindow.authorize();
+      await this._fetchFilesOrPromptToAuthorize();
     } finally {
       this._authWindow.close();
       this._authWindow = null;
@@ -124,24 +120,34 @@ export default class LMSFilePicker extends Component {
       onCancel();
     };
 
-    const title = isAuthorizing ? 'Authorizing' : `Select file from ${lmsName}`;
+    const title = isAuthorizing
+      ? 'Allow file access'
+      : `Select file from ${lmsName}`;
 
     return (
       <Dialog
         contentClass="LMSFilePicker__dialog"
         title={title}
         onCancel={cancel}
+        buttons={
+          isAuthorizing && [
+            <Button
+              key="showAuthWindow"
+              onClick={this._authorizeAndFetchFiles}
+              label="Authorize"
+            />,
+          ]
+        }
       >
         {isAuthorizing && (
           <Fragment>
-            Waiting for authorization to access your files in {lmsName}{' '}
-            <Button
-              onClick={this._authenticateAndFetchFiles}
-              label="Show authorization window"
-            />
+            <p>
+              To select a file, you must authorize Hypothesis to access your
+              files in {lmsName}.
+            </p>
           </Fragment>
         )}
-        {files && (
+        {!isAuthorizing && (
           <Fragment>
             <DirectoryBreadcrumbs
               path={path}

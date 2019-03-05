@@ -6,22 +6,14 @@ import queryString from 'query-string';
 export default class AuthWindow {
   constructor({ authToken, lmsName }) {
     this._authToken = authToken;
-
-    const width = 475;
-    const height = 430;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
-    const settings = queryString.stringify({ left, top, width, height });
-    this._authWin = window.open(
-      'about:blank',
-      `Authorize ${lmsName} files`,
-      settings
-    );
+    this._lmsName = lmsName;
   }
 
   close() {
-    this._authWin.close();
-    this._authWin = null;
+    if (this._authWin) {
+      this._authWin.close();
+      this._authWin = null;
+    }
   }
 
   focus() {
@@ -39,16 +31,28 @@ export default class AuthWindow {
    * an API call and check for a successful response.
    */
   async authorize() {
-    if (!this._authWin) {
-      throw new Error('Authorization failed');
-    }
+    const width = 640;
+    const height = Math.round(width * (2 / 3));
+    const left = Math.round(window.screen.width / 2 - width / 2);
+    const top = Math.round(window.screen.height / 2 - height / 2);
+    const settings = queryString
+      .stringify({ left, top, width, height })
+      .replace(/&/g, ',');
     const authQuery = queryString.stringify({ auth_token: this._authToken });
     const authUrl = `/authorize_lms_file_access?${authQuery}`;
-    this._authWin.location = authUrl;
+    this._authWin = window.open(
+      authUrl,
+      `Allow access to ${this._lmsName} files`,
+      settings
+    );
+
+    if (!this._authWin) {
+      throw new Error('Window creation failed');
+    }
 
     return new Promise(resolve => {
       const timer = setInterval(() => {
-        if (this._authWin.closed) {
+        if (!this._authWin || this._authWin.closed) {
           clearInterval(timer);
           resolve();
         }

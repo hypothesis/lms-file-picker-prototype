@@ -17,6 +17,7 @@ const { listFiles } = require('./fake-lms-storage');
 const app = express();
 const options = {};
 const bundler = new Bundler(`${__dirname}/../index.js`, options);
+const lmsName = 'Canvas';
 
 // Map of auth token to authentication state.
 const isAuthenticated = {};
@@ -65,12 +66,20 @@ app.get('/oauth_redirect', (req, res) => {
 app.get('/fake_lms_oauth_authorize', (req, res) => {
   const redirect_uri = req.query.redirect_uri;
   const authToken = req.query.state;
-  res.send(`
+  const html = mustache.render(`
     <html>
       <body>
+        <style>
+          body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+        </style>
         <p>
-          Hypothesis wants to access your files in LMS_NAME_HERE. Click "Authorize"
-          to allow this.
+          <b>Hypothesis wants to access your files in {{ lmsName }}. Click "Authorize"
+          to allow this.</b>
         </p>
         <form action="${redirect_uri}" method="GET">
           <input type="hidden" name="state" value="${authToken}">
@@ -78,7 +87,8 @@ app.get('/fake_lms_oauth_authorize', (req, res) => {
         </form>
       </body>
     </html>
-  `);
+  `, { lmsName });
+  res.send(html);
 });
 
 /**
@@ -124,6 +134,8 @@ app.get('/lms_files', (req, res) => {
   res.json({ files });
 });
 
+const randomHexString = () => Math.random().toString(16).slice(2);
+
 /**
  * Homepage route for LMS file picker.
  *
@@ -131,7 +143,7 @@ app.get('/lms_files', (req, res) => {
  * identity and then renders the file picker form.
  */
 app.get('/', (req, res) => {
-  const authToken = 'dummy-jwt-token';
+  const authToken = randomHexString();
   const html = mustache.render(
     `
 <html>
@@ -143,7 +155,7 @@ app.get('/', (req, res) => {
     <script type="application/json" class="js-hypothesis-config">
       {
         "authToken": "{{ authToken }}",
-        "lmsName": "Canvas"
+        "lmsName": "{{ lmsName }}"
       }
     </script>
     <div id="app"></div>
@@ -151,7 +163,7 @@ app.get('/', (req, res) => {
   </body>
 </html>
 `,
-    { authToken }
+    { authToken, lmsName }
   );
   res.send(html);
 });

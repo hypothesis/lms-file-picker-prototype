@@ -9,7 +9,7 @@ import { zIndexScale } from '../utils/style';
 /**
  * A modal dialog with a title and a row of action buttons at the bottom.
  */
-export default function Dialog({ children, contentClass, onCancel, title }) {
+export default function Dialog({ children, contentClass, onCancel, title, buttons }) {
   const handleKey = event => {
     event.stopPropagation();
 
@@ -37,6 +37,7 @@ export default function Dialog({ children, contentClass, onCancel, title }) {
           <h1 className="Dialog__title">{title}</h1>
           {children}
           <div className="Dialog__actions">
+            {buttons}
             {onCancel && <Button onClick={onCancel} label="Cancel" />}
           </div>
         </div>
@@ -48,6 +49,13 @@ export default function Dialog({ children, contentClass, onCancel, title }) {
 Dialog.propTypes = {
   /** The content of the dialog. */
   children: propTypes.arrayOf(propTypes.element),
+
+  /**
+   * Additional buttons to display at the bottom of the dialog.
+   *
+   * The "Cancel" button is added automatically if the `onCancel` prop is set.
+   */
+  buttons: propTypes.arrayOf(propTypes.element),
 
   /**
    * Class applied to the content of the dialog.
