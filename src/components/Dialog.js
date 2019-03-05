@@ -9,7 +9,13 @@ import { zIndexScale } from '../utils/style';
 /**
  * A modal dialog with a title and a row of action buttons at the bottom.
  */
-export default function Dialog({ children, contentClass, onCancel, title, buttons }) {
+export default function Dialog({
+  children,
+  contentClass,
+  onCancel,
+  title,
+  buttons,
+}) {
   const handleKey = event => {
     event.stopPropagation();
 
@@ -24,8 +30,21 @@ export default function Dialog({ children, contentClass, onCancel, title, button
     }
   };
 
+  // TODO - Accessibility guidance:
+  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
+  //
+  // - Save and restore keyboard focus when dialog is mounted and unmounted.
+  // - Focus an appropriate control when the dialog is first shown.
+  // - Keep tab focus within the dialog when active.
+
   return (
-    <div onKeyDown={handleKey} tabIndex="0" ref={rootEl}>
+    <div
+      role="dialog"
+      aria-labelledby="Dialog__title"
+      onKeyDown={handleKey}
+      tabIndex="0"
+      ref={rootEl}
+    >
       <DialogBackground />
       <div className="Dialog__container" style={{ zIndex: zIndexScale.dialog }}>
         <div
@@ -34,7 +53,9 @@ export default function Dialog({ children, contentClass, onCancel, title, button
             [contentClass]: true,
           })}
         >
-          <h1 className="Dialog__title">{title}</h1>
+          <h1 className="Dialog__title" id="Dialog__title">
+            {title}
+          </h1>
           {children}
           <div className="Dialog__actions">
             {buttons}
