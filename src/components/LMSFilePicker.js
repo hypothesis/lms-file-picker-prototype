@@ -39,9 +39,7 @@ export default class LMSFilePicker extends Component {
       /** Set to `true` if the list of files is being fetched. */
       isLoading: true,
     };
-    this._authorizeAndFetchFiles = this._authorizeAndFetchFiles.bind(
-      this
-    );
+    this._authorizeAndFetchFiles = this._authorizeAndFetchFiles.bind(this);
     this._fetchFiles = this._fetchFiles.bind(this);
 
     // `AuthWindow` instance, set only when waiting for the user to approve
@@ -49,7 +47,7 @@ export default class LMSFilePicker extends Component {
     this._authWindow = null;
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this._fetchFilesOrPromptToAuthorize();
   }
 
@@ -138,12 +136,10 @@ export default class LMSFilePicker extends Component {
         }
       >
         {isAuthorizing && (
-          <Fragment>
-            <p>
-              To select a file, you must authorize Hypothesis to access your
-              files in {lmsName}.
-            </p>
-          </Fragment>
+          <p>
+            To select a file, you must authorize Hypothesis to access your files
+            in {lmsName}.
+          </p>
         )}
         {!isAuthorizing && (
           <Fragment>
