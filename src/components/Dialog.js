@@ -9,15 +9,22 @@ import { zIndexScale } from '../utils/style';
  * Accessibility notes:
  *
  * Dialog accessibility is not trivial. We may want to use something like
- * https://github.com/reactjs/react-modal instead or as a basis.
+ * https://github.com/reactjs/react-modal instead or as the basis of this
+ * component.
  *
  * Resources:
  *
- * - https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
- * - https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
+ * 1. https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
+ * 2. https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
+ * 3. https://www.marcozehe.de/2015/02/05/advanced-aria-tip-2-accessible-modal-dialogs/
+ *
+ * [3] is the most useful resource IMO as it highlights the essentials from
+ * the perspective of a blind engineer.
  *
  * Things that are not implemented here yet:
  *
+ * - A description which is reliably read out when the dialog is opened, in
+ *   addition to the title.
  * - Saving and restoring keyboard focus when dialog is mounted and unmounted.
  * - Keeping tab focus within the dialog when shown.
  * - Hiding content underneath the dialog from screen readers.
