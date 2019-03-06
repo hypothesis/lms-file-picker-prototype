@@ -6,6 +6,24 @@ import Button from './Button';
 import { zIndexScale } from '../utils/style';
 
 /**
+ * Accessibility notes:
+ *
+ * Dialog accessibility is not trivial. We may want to use something like
+ * https://github.com/reactjs/react-modal instead or as a basis.
+ *
+ * Resources:
+ *
+ * - https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
+ * - https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
+ *
+ * Things that are not implemented here yet:
+ *
+ * - Saving and restoring keyboard focus when dialog is mounted and unmounted.
+ * - Keeping tab focus within the dialog when shown.
+ * - Hiding content underneath the dialog from screen readers.
+ */
+
+/**
  * A modal dialog with a title and a row of action buttons at the bottom.
  */
 export default function Dialog({
@@ -25,16 +43,12 @@ export default function Dialog({
 
   const rootEl = el => {
     if (el) {
+      // Modern accessibility guidance is to focus the dialog itself rather than
+      // trying to be smart about focusing a particular control within the
+      // dialog. See resources above.
       el.focus();
     }
   };
-
-  // TODO - Accessibility guidance:
-  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
-  //
-  // - Save and restore keyboard focus when dialog is mounted and unmounted.
-  // - Focus an appropriate control when the dialog is first shown.
-  // - Keep tab focus within the dialog when active.
 
   return (
     <div
