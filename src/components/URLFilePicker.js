@@ -1,4 +1,5 @@
 import { createRef, h } from 'preact';
+import { useEffect } from 'preact/hooks';
 import propTypes from 'prop-types';
 
 import Button from './Button';
@@ -14,6 +15,10 @@ export default function URLFilePicker({ onCancel, onSelectURL }) {
       form.current.reportValidity();
     }
   };
+
+  useEffect(() => {
+    input.current.focus();
+  }, [input.current]);
 
   return (
     <Dialog contentClass="URLFilePicker__dialog" title="Enter URL" onCancel={onCancel} buttons={[
