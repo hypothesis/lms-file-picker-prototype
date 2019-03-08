@@ -1,4 +1,4 @@
-import { Component, h } from 'preact';
+import { Component, Fragment, h } from 'preact';
 import propTypes from 'prop-types';
 
 import AuthWindow from '../utils/AuthWindow';
@@ -7,8 +7,6 @@ import Dialog from './Dialog';
 import DirectoryBreadcrumbs from './DirectoryBreadcrumbs';
 import FileList from './FileList';
 import { AuthorizationError, listFiles } from '../utils/api';
-
-const Fragment = children => <span>{children}</span>;
 
 /**
  * A file picker dialog that allows the user to choose files from their
@@ -26,7 +24,7 @@ export default class LMSFilePicker extends Component {
        * `true` if we are waiting for the user to authorize the app's access
        * to files in the LMS.
        */
-      isAuthorizing: false,
+      isAuthorizing: !this.props.isAuthorized,
 
       /**
        * The array of files returned by a call to `listFiles`.
@@ -41,9 +39,7 @@ export default class LMSFilePicker extends Component {
       /** Set to `true` if the list of files is being fetched. */
       isLoading: true,
     };
-    this._authorizeAndFetchFiles = this._authorizeAndFetchFiles.bind(
-      this
-    );
+    this._authorizeAndFetchFiles = this._authorizeAndFetchFiles.bind(this);
     this._fetchFiles = this._fetchFiles.bind(this);
 
     // `AuthWindow` instance, set only when waiting for the user to approve
@@ -51,8 +47,12 @@ export default class LMSFilePicker extends Component {
     this._authWindow = null;
   }
 
-  async componentDidMount() {
-    this._fetchFilesOrPromptToAuthorize();
+  componentDidMount() {
+    if (this.state.isAuthorizing) {
+      this._authorizeAndFetchFiles();
+    } else {
+      this._fetchFilesOrPromptToAuthorize();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -82,6 +82,8 @@ export default class LMSFilePicker extends Component {
   }
 
   async _authorizeAndFetchFiles() {
+    this.setState({ isAuthorizing: true });
+
     if (this._authWindow) {
       this._authWindow.focus();
       return;
@@ -93,6 +95,10 @@ export default class LMSFilePicker extends Component {
     try {
       await this._authWindow.authorize();
       await this._fetchFilesOrPromptToAuthorize();
+
+      if (this.props.onAuthorized) {
+        this.props.onAuthorized();
+      }
     } finally {
       this._authWindow.close();
       this._authWindow = null;
@@ -140,12 +146,10 @@ export default class LMSFilePicker extends Component {
         }
       >
         {isAuthorizing && (
-          <Fragment>
-            <p>
-              To select a file, you must authorize Hypothesis to access your
-              files in {lmsName}.
-            </p>
-          </Fragment>
+          <p>
+            To select a file, you must authorize Hypothesis to access your files
+            in {lmsName}.
+          </p>
         )}
         {!isAuthorizing && (
           <Fragment>
@@ -169,6 +173,12 @@ LMSFilePicker.propTypes = {
   authToken: propTypes.string,
 
   /**
+   * A hint as to whether the backend believes the user has authorized our
+   * LMS app's access to the user's files in the LMS.
+   */
+  isAuthorized: propTypes.bool,
+
+  /**
    * The name of the LMS to display in API controls, eg. "Canvas".
    */
   lmsName: propTypes.string,
@@ -181,4 +191,9 @@ LMSFilePicker.propTypes = {
    * a selection.
    */
   onSelectFile: propTypes.func,
+
+  /**
+   * Callback invoked when authorization succeeds.
+   */
+  onAuthorized: propTypes.func,
 };

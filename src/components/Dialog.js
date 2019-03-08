@@ -3,8 +3,32 @@ import propTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Button from './Button';
-import DialogBackground from './DialogBackground';
 import { zIndexScale } from '../utils/style';
+
+/**
+ * Accessibility notes:
+ *
+ * Dialog accessibility is not trivial. We may want to use something like
+ * https://github.com/reactjs/react-modal instead or as the basis of this
+ * component.
+ *
+ * Resources:
+ *
+ * 1. https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
+ * 2. https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
+ * 3. https://www.marcozehe.de/2015/02/05/advanced-aria-tip-2-accessible-modal-dialogs/
+ *
+ * [3] is the most useful resource IMO as it highlights the essentials from
+ * the perspective of a blind engineer.
+ *
+ * Things that are not implemented here yet:
+ *
+ * - A description which is reliably read out when the dialog is opened, in
+ *   addition to the title.
+ * - Saving and restoring keyboard focus when dialog is mounted and unmounted.
+ * - Keeping tab focus within the dialog when shown.
+ * - Hiding content underneath the dialog from screen readers.
+ */
 
 /**
  * A modal dialog with a title and a row of action buttons at the bottom.
@@ -26,16 +50,12 @@ export default function Dialog({
 
   const rootEl = el => {
     if (el) {
+      // Modern accessibility guidance is to focus the dialog itself rather than
+      // trying to be smart about focusing a particular control within the
+      // dialog. See resources above.
       el.focus();
     }
   };
-
-  // TODO - Accessibility guidance:
-  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
-  //
-  // - Save and restore keyboard focus when dialog is mounted and unmounted.
-  // - Focus an appropriate control when the dialog is first shown.
-  // - Keep tab focus within the dialog when active.
 
   return (
     <div
@@ -45,7 +65,7 @@ export default function Dialog({
       tabIndex="0"
       ref={rootEl}
     >
-      <DialogBackground />
+      <div className="Dialog__background" style={{ zIndex: zIndexScale.dialogBackground }}/>
       <div className="Dialog__container" style={{ zIndex: zIndexScale.dialog }}>
         <div
           className={classNames({

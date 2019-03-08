@@ -143,7 +143,14 @@ const randomHexString = () => Math.random().toString(16).slice(2);
  * identity and then renders the file picker form.
  */
 app.get('/', (req, res) => {
+  // An authentication token that the frontend should include in any API
+  // calls to the backend.
   const authToken = randomHexString();
+
+  // A hint as to whether the backend believes that the user has authorized
+  // access to their LMS files or not. This is used to optimize the UX flow.
+  const isLmsFileAccessAuthorized = false;
+
   const html = mustache.render(
     `
 <html>
@@ -155,6 +162,7 @@ app.get('/', (req, res) => {
     <script type="application/json" class="js-hypothesis-config">
       {
         "authToken": "{{ authToken }}",
+        "isLmsFileAccessAuthorized": "{{ isLmsFileAccessAuthorized }}",
         "lmsName": "{{ lmsName }}"
       }
     </script>
@@ -163,7 +171,7 @@ app.get('/', (req, res) => {
   </body>
 </html>
 `,
-    { authToken, lmsName }
+    { authToken, isLmsFileAccessAuthorized, lmsName }
   );
   res.send(html);
 });
