@@ -1,7 +1,7 @@
 dependencies:
   classnames: 2.2.6
   normalize.css: 8.0.1
-  preact: 8.4.2
+  preact: 10.0.0-alpha.1
   prop-types: 15.7.2
   query-string: 6.3.0
 devDependencies:
@@ -4813,11 +4813,13 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-quMHnDckt2DQ9lRi6bYLnuyBDnVzK+McHa8+ar4kTdYbWEo/92hREOu3h70ZirudOOp/my2b3r0m5YtxY52yrA==
-  /preact/8.4.2:
+  /preact/10.0.0-alpha.1:
+    dependencies:
+      prop-types: 15.7.2
     dev: false
     requiresBuild: true
     resolution:
-      integrity: sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==
+      integrity: sha512-9mDFKeU8SkepfCcjsoq/lODLKBtjgZj/aGBJaVXTNOEZV5XgOfE2TZQkFWDejE7w/q1qKUh1tJZaAeICxAKJ1g==
   /prelude-ls/1.1.2:
     dev: true
     engines:
@@ -6154,7 +6156,7 @@ specifiers:
   nodemon: ^1.18.10
   normalize.css: ^8.0.1
   parcel-bundler: ^1.11.0
-  preact: ^8.4.2
+  preact: ^10.0.0-alpha.1
   prettier: ^1.16.4
   prop-types: ^15.7.2
   query-string: ^6.2.0
