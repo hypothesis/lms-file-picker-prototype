@@ -24,7 +24,7 @@ export default class LMSFilePicker extends Component {
        * `true` if we are waiting for the user to authorize the app's access
        * to files in the LMS.
        */
-      isAuthorizing: false,
+      isAuthorizing: !this.props.isAuthorized,
 
       /**
        * The array of files returned by a call to `listFiles`.
@@ -48,7 +48,11 @@ export default class LMSFilePicker extends Component {
   }
 
   componentDidMount() {
-    this._fetchFilesOrPromptToAuthorize();
+    if (this.state.isAuthorizing) {
+      this._authorizeAndFetchFiles();
+    } else {
+      this._fetchFilesOrPromptToAuthorize();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -78,6 +82,8 @@ export default class LMSFilePicker extends Component {
   }
 
   async _authorizeAndFetchFiles() {
+    this.setState({ isAuthorizing: true });
+
     if (this._authWindow) {
       this._authWindow.focus();
       return;
@@ -89,6 +95,10 @@ export default class LMSFilePicker extends Component {
     try {
       await this._authWindow.authorize();
       await this._fetchFilesOrPromptToAuthorize();
+
+      if (this.props.onAuthorized) {
+        this.props.onAuthorized();
+      }
     } finally {
       this._authWindow.close();
       this._authWindow = null;
@@ -163,6 +173,12 @@ LMSFilePicker.propTypes = {
   authToken: propTypes.string,
 
   /**
+   * A hint as to whether the backend believes the user has authorized our
+   * LMS app's access to the user's files in the LMS.
+   */
+  isAuthorized: propTypes.bool,
+
+  /**
    * The name of the LMS to display in API controls, eg. "Canvas".
    */
   lmsName: propTypes.string,
@@ -175,4 +191,9 @@ LMSFilePicker.propTypes = {
    * a selection.
    */
   onSelectFile: propTypes.func,
+
+  /**
+   * Callback invoked when authorization succeeds.
+   */
+  onAuthorized: propTypes.func,
 };

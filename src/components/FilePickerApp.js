@@ -18,13 +18,15 @@ export default class FilePickerApp extends Component {
 
     this.state = {
       activeDialog: null,
-      source: null,
+      isLmsFileAccessAuthorized: props.isLmsFileAccessAuthorized,
       path: null,
+      source: null,
     };
   }
 
   render() {
     const { authToken, lmsName } = this.props;
+    const { isLmsFileAccessAuthorized } = this.state;
 
     const showDialog = dialog => this.setState({ activeDialog: dialog });
     const cancelDialog = () => this.setState({ activeDialog: null });
@@ -39,6 +41,10 @@ export default class FilePickerApp extends Component {
           this._form.current.submit();
         }
       );
+    };
+
+    const lmsAuthorized = () => {
+      this.setState({ isLmsFileAccessAuthorized: true });
     };
 
     const selectURL = url => {
@@ -69,7 +75,9 @@ export default class FilePickerApp extends Component {
         activeDialog = (
           <LMSFilePicker
             authToken={authToken}
+            isAuthorized={isLmsFileAccessAuthorized}
             lmsName={lmsName}
+            onAuthorized={lmsAuthorized}
             onCancel={cancelDialog}
             onSelectFile={selectLMSFile}
           />
@@ -119,6 +127,12 @@ FilePickerApp.propTypes = {
    * Authentication token to include in calls to the backend.
    */
   authToken: propTypes.string,
+
+  /**
+   * A hint as to whether the user has authorized the Hypothesis LMS app to
+   * access their files in the LMS.
+   */
+  isLmsFileAccessAuthorized: propTypes.bool,
 
   /**
    * Name of the LMS to use in UI controls.
