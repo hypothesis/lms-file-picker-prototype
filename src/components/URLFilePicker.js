@@ -8,7 +8,8 @@ import Dialog from './Dialog';
 export default function URLFilePicker({ onCancel, onSelectURL }) {
   const input = createRef();
   const form = createRef();
-  const submit = () => {
+  const submit = event => {
+    event.preventDefault();
     if (form.current.checkValidity()) {
       onSelectURL(input.current.value);
     } else {
@@ -25,7 +26,7 @@ export default function URLFilePicker({ onCancel, onSelectURL }) {
       <Button key="submit" label="Submit" onClick={submit}/>,
     ]}>
       <p>Enter the URL of any publicly available web page or PDF.</p>
-      <form ref={form} className="u-flex-row">
+      <form ref={form} className="u-flex-row" onSubmit={submit}>
           <label className="label" htmlFor="url">
             Link:{' '}
           </label>
