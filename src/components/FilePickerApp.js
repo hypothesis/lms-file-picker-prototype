@@ -4,6 +4,7 @@ import propTypes from 'prop-types';
 import Button from './Button';
 import LMSFilePicker from './LMSFilePicker';
 import GoogleFilePicker from './GoogleFilePicker';
+import URLFilePicker from './URLFilePicker';
 
 /**
  * Root client-side application for the form that allows the user to choose
@@ -13,10 +14,6 @@ export default class FilePickerApp extends Component {
   constructor(props) {
     super(props);
 
-    this._selectFileFromLMS = this._selectFileFromLMS.bind(this);
-    this._selectFileFromGoogleDrive = this._selectFileFromGoogleDrive.bind(
-      this
-    );
     this._form = createRef();
 
     this.state = {
@@ -26,17 +23,10 @@ export default class FilePickerApp extends Component {
     };
   }
 
-  _selectFileFromLMS() {
-    this.setState({ activeDialog: 'lms-file-picker' });
-  }
-
-  _selectFileFromGoogleDrive() {
-    this.setState({ activeDialog: 'google-file-picker' });
-  }
-
   render() {
     const { authToken, lmsName } = this.props;
 
+    const showDialog = dialog => this.setState({ activeDialog: dialog });
     const cancelDialog = () => this.setState({ activeDialog: null });
     const selectLMSFile = path => {
       this.setState(
@@ -51,16 +41,30 @@ export default class FilePickerApp extends Component {
       );
     };
 
-    const urlChanged = () => {
-      const path = this._form.current.elements.path.value;
-      this.setState({
-        source: 'url',
-        path,
-      });
+    const selectURL = url => {
+      this.setState(
+        {
+          activeDialog: null,
+          source: 'url',
+          path: url,
+        },
+        () => {
+          this._form.current.submit();
+        }
+      );
     };
 
     let activeDialog;
     switch (this.state.activeDialog) {
+      case 'url-file-picker':
+        activeDialog = (
+          <URLFilePicker
+            lmsName={lmsName}
+            onCancel={cancelDialog}
+            onSelectURL={selectURL}
+          />
+        );
+        break;
       case 'lms-file-picker':
         activeDialog = (
           <LMSFilePicker
@@ -81,35 +85,28 @@ export default class FilePickerApp extends Component {
     return (
       <main>
         <form className="FilePickerApp__form" ref={this._form} method="POST">
-          <h1 className="heading-1">Select web page or PDF for assignment</h1>
-          <div>
-            <input name="source" type="hidden" value={this.state.source} />
-            <div className="FilePickerApp__url-field">
-              <label className="label" htmlFor="url">
-                Link:{' '}
-              </label>
-              <input
-                className="u-stretch u-cross-stretch"
-                name="path"
-                type="url"
-                placeholder="https://example.com/article.pdf"
-                required={true}
-                value={this.state.path}
-                onInput={urlChanged}
-              />
-              <Button type="submit" label="Submit" />
-            </div>
-            <div>
-              <Button
-                label={`Choose from files in ${lmsName}`}
-                onClick={this._selectFileFromLMS}
-              />
-              <Button
-                label="Choose from Google Drive"
-                onClick={this._selectFileFromGoogleDrive}
-              />
-            </div>
-          </div>
+          <h1 className="heading-1">Select web page or PDF</h1>
+          <p>
+            You can select content for your assignment from one of the following
+            sources:
+          </p>
+          <input name="source" type="hidden" value={this.state.source} />
+          <input name="path" type="hidden" value={this.state.path} />
+          <Button
+            className="FilePickerApp__source-button"
+            label="Enter public URL"
+            onClick={() => showDialog('url-file-picker')}
+          />
+          <Button
+            className="FilePickerApp__source-button"
+            label={`PDF from ${lmsName}`}
+            onClick={() => showDialog('lms-file-picker')}
+          />
+          <Button
+            className="FilePickerApp__source-button"
+            label="PDF from Google Drive"
+            onClick={() => showDialog('google-file-picker')}
+          />
         </form>
         {activeDialog}
       </main>

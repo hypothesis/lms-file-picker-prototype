@@ -1,5 +1,15 @@
 // Utility classes.
 
+.u-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.u-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 // Make item stretch along main axis.
 .u-stretch {
   flex-grow: 1;
