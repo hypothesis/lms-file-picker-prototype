@@ -28,7 +28,7 @@ export default function URLFilePicker({ onCancel, onSelectURL }) {
       <p>Enter the URL of any publicly available web page or PDF.</p>
       <form ref={form} className="u-flex-row" onSubmit={submit}>
           <label className="label" htmlFor="url">
-            Link:{' '}
+            URL:{' '}
           </label>
           <input
             className="u-stretch u-cross-stretch"
