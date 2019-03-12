@@ -78,8 +78,8 @@ export default function Dialog({
           </h1>
           {children}
           <div className="Dialog__actions">
+            {onCancel && <Button className="Button--cancel" onClick={onCancel} label="Cancel" />}
             {buttons}
-            {onCancel && <Button onClick={onCancel} label="Cancel" />}
           </div>
         </div>
       </div>
