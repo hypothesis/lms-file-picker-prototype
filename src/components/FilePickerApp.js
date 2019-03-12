@@ -102,17 +102,17 @@ export default class FilePickerApp extends Component {
           <input name="path" type="hidden" value={this.state.path} />
           <Button
             className="FilePickerApp__source-button"
-            label="Enter public URL"
+            label="Enter public URL of web page or PDF"
             onClick={() => showDialog('url-file-picker')}
           />
           <Button
             className="FilePickerApp__source-button"
-            label={`PDF from ${lmsName}`}
+            label={`Select PDF from ${lmsName}`}
             onClick={() => showDialog('lms-file-picker')}
           />
           <Button
             className="FilePickerApp__source-button"
-            label="PDF from Google Drive"
+            label="Select PDF from Google Drive"
             onClick={() => showDialog('google-file-picker')}
           />
         </form>
