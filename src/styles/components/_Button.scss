@@ -25,10 +25,10 @@
 
 .Button--cancel {
   color: $grey-6;
-  background-color: white;
+  background-color: $grey-2;
 
   &:hover {
-    background-color: white;
+    background-color: $grey-3;
     color: $brand;
   }
 }
