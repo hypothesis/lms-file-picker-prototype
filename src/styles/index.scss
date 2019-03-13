@@ -7,17 +7,20 @@
 @import 'utils';
 @import 'typography';
 
-// React components.
+// HTML components.
+@import 'components/label';
+
+// Generic React components.
 @import 'components/Button';
 @import 'components/Dialog';
+@import 'components/Table';
+
+// LMS file picker React components.
 @import 'components/DirectoryBreadcrumbs';
 @import 'components/FileList';
 @import 'components/FilePickerApp';
 @import 'components/LMSFilePicker';
 @import 'components/URLFilePicker';
-
-// Other components.
-@import 'components/label';
 
 // Element styles.
 body {
