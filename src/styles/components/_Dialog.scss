@@ -31,7 +31,20 @@
 }
 
 .Dialog__title {
+  display: flex;
+  align-items: center;
   font-size: $title-font-size;
+}
+
+.Dialog__cancel-btn {
+  border: 0;
+  background: none;
+  color: $grey-6;
+
+  &:hover {
+    background-color: $grey-3;
+    color: $brand;
+  }
 }
 
 .Dialog__actions {

@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { useEffect, useRef } from 'preact/hooks';
 import propTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -48,14 +49,13 @@ export default function Dialog({
     }
   };
 
-  const rootEl = el => {
-    if (el) {
-      // Modern accessibility guidance is to focus the dialog itself rather than
-      // trying to be smart about focusing a particular control within the
-      // dialog. See resources above.
-      el.focus();
-    }
-  };
+  const rootEl = useRef(null);
+  useEffect(() => {
+    // Modern accessibility guidance is to focus the dialog itself rather than
+    // trying to be smart about focusing a particular control within the
+    // dialog. See resources above.
+    rootEl.current.focus();
+  }, [rootEl.current]);
 
   return (
     <div
@@ -75,8 +75,11 @@ export default function Dialog({
         >
           <h1 className="Dialog__title" id="Dialog__title">
             {title}
+            <span className="u-stretch"/>
+            <button className="Dialog__cancel-btn" onClick={onCancel}>✕</button>
           </h1>
           {children}
+          <div className="u-stretch"/>
           <div className="Dialog__actions">
             {onCancel && <Button className="Button--cancel" onClick={onCancel} label="Cancel" />}
             {buttons}
