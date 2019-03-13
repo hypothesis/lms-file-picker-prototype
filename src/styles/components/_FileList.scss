@@ -1,10 +1,11 @@
 $file-list-item-height: 40px;
+$file-list-icon-size: 24px;
 
 // Wrapper around the table. This is used because table elements do not support
 // setting the `height` or `overflow` properties directly.
 .FileList__wrapper {
   height: 7 * $file-list-item-height;
-  overflow: scroll;
+  overflow: auto;
   border: 1px solid $grey-6;
 
   margin-top: 10px;
@@ -33,6 +34,11 @@ $file-list-item-height: 40px;
   padding-bottom: 5px;
 }
 
+.FileList__name-col {
+  text-align: left;
+  padding-left: 10px;
+}
+
 .FileList__date-col {
   width: 120px;
   text-align: left;
@@ -56,17 +62,23 @@ $file-list-item-height: 40px;
   }
 }
 
+.FileList__row.is-selected {
+  background-color: $grey-3;
+}
+
 .FileList__icon {
   margin-left: 10px;
   margin-right: 10px;
-  width: 24px;
-  height: 24px;
+  width: $file-list-icon-size;
+  height: $file-list-icon-size;
+  vertical-align: middle;
 }
 
 .FileList__name {
   flex-grow: 1;
   text-decoration: none;
   color: black;
+  vertical-align: middle;
 }
 
 .FileList__date {

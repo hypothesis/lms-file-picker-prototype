@@ -32,6 +32,11 @@ export default class LMSFilePicker extends Component {
       files: [],
 
       /**
+       * The file within `files` which is currently selected.
+       */
+      selectedFile: null,
+
+      /**
        * The current directory within the LMS's file system.
        */
       path: '',
@@ -107,16 +112,20 @@ export default class LMSFilePicker extends Component {
 
   render() {
     const { lmsName, onCancel, onSelectFile } = this.props;
-    const { files, isAuthorizing, isLoading, path } = this.state;
+    const { files, isAuthorizing, isLoading, path, selectedFile } = this.state;
 
     const changePath = path => this.setState({ path });
 
-    const selectFile = file => {
+    const useFile = file => {
       if (file.type === 'directory') {
-        this.setState({ path: path + '/' + file.name });
+        this.setState({ path: path + '/' + file.name, selectedFile: null });
       } else {
         onSelectFile(path + '/' + file.name);
       }
+    };
+
+    const selectFile = file => {
+      this.setState({ selectedFile: file });
     };
 
     const cancel = () => {
@@ -125,6 +134,8 @@ export default class LMSFilePicker extends Component {
       }
       onCancel();
     };
+
+    const useSelectedFile = () => useFile(selectedFile);
 
     const title = isAuthorizing
       ? 'Allow file access'
@@ -135,15 +146,17 @@ export default class LMSFilePicker extends Component {
         contentClass="LMSFilePicker__dialog"
         title={title}
         onCancel={cancel}
-        buttons={
-          isAuthorizing && [
+        buttons={[
+          isAuthorizing ? (
             <Button
               key="showAuthWindow"
               onClick={this._authorizeAndFetchFiles}
               label="Authorize"
-            />,
-          ]
-        }
+            />
+          ) : (
+            <Button key="select" onClick={useSelectedFile} label="Select" />
+          ),
+        ]}
       >
         {isAuthorizing && (
           <p>
@@ -158,7 +171,12 @@ export default class LMSFilePicker extends Component {
               onChangePath={changePath}
               isLoading={isLoading}
             />
-            <FileList files={files} onSelectFile={selectFile} />
+            <FileList
+              files={files}
+              selectedFile={selectedFile}
+              onUseFile={useFile}
+              onSelectFile={selectFile}
+            />
           </Fragment>
         )}
       </Dialog>
