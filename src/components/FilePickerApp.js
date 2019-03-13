@@ -102,7 +102,7 @@ export default class FilePickerApp extends Component {
           <input name="path" type="hidden" value={this.state.path} />
           <Button
             className="FilePickerApp__source-button"
-            label="Enter public URL of web page or PDF"
+            label="Enter URL of web page or PDF"
             onClick={() => showDialog('url-file-picker')}
           />
           <Button
