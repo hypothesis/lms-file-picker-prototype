@@ -69,6 +69,7 @@ export default function Table({
                 Table__row: true,
                 'is-selected': selectedItem === item,
               })}
+              onMouseDown={() => onSelectItem(item)}
               onClick={() => onSelectItem(item)}
               onDblClick={() => onUseItem(item)}
             >
