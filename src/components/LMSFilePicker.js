@@ -139,7 +139,7 @@ export default class LMSFilePicker extends Component {
 
     const title = isAuthorizing
       ? 'Allow file access'
-      : `Select file from ${lmsName}`;
+      : 'Select a file';
 
     return (
       <Dialog
@@ -167,6 +167,7 @@ export default class LMSFilePicker extends Component {
         {!isAuthorizing && (
           <Fragment>
             <DirectoryBreadcrumbs
+              rootLabel={`${lmsName} Files`}
               path={path}
               onChangePath={changePath}
               isLoading={isLoading}

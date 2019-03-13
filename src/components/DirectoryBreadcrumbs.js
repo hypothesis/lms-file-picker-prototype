@@ -6,12 +6,13 @@ import propTypes from 'prop-types';
  * and provides links to go up to parent directories.
  */
 export default function DirectoryBreadcrumbs({
-  path,
-  onChangePath,
   isLoading,
+  onChangePath,
+  path,
+  rootLabel = 'Files',
 }) {
   const nonEmptyParts = path.split('/').filter(part => part !== '');
-  const segments = ['Files', ...nonEmptyParts];
+  const segments = [rootLabel, ...nonEmptyParts];
   const changeDir = segmentIndex => {
     const destPath = segments.slice(1, segmentIndex + 1).join('/');
     onChangePath(destPath);
@@ -46,6 +47,9 @@ export default function DirectoryBreadcrumbs({
 }
 
 DirectoryBreadcrumbs.propTypes = {
+  /** A label for the root of the directory hierarchy. */
+  rootLabel: propTypes.string,
+
   /**
    * If `true`, a loading indicator is displayed to indicate that the directory
    * contents are being fetched.
